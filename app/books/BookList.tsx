@@ -7,7 +7,7 @@ import { useBooks } from '@/queries/useBooks';
 interface BookListProps {}
 
 export const BookList = ({}: BookListProps) => {
-    const { data  } = useBooks();
+    const { data } = useBooks();
     const books = data?.data;
 
   return (

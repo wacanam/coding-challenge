@@ -7,13 +7,15 @@ import ActionButton from "@/components/ActionButton";
 import { Input } from "@/components/Input";
 import { Modal } from "@/components/Modal";
 import { useSupabase } from "@/hooks/useSupabase";
+import { useAddBook } from "@/queries/useAddBook";
 
 interface AddBookProps {}
 
 export default function AddBook(props: AddBookProps){
-    const supabase = useSupabase()
+    // const supabase = useSupabase()
     const [isOpen, setIsOpen] = React.useState(false);
     const formRef = React.useRef<HTMLFormElement>(null);
+    const { mutateAsync } = useAddBook();
 
     const handleOpenModal = () => {
         setIsOpen(true);
@@ -23,35 +25,62 @@ export default function AddBook(props: AddBookProps){
         setIsOpen(false);
     }
 
-    const action = async (formData: FormData) => {
-        const title = formData.get("title") as string;
-        const author = formData.get("author") as string;
-        const genre = formData.get("genre") as string;
-        const publishedDate = formData.get("publishedDate") as string;
+    // const action = async (formData: FormData) => {
+    //     const title = formData.get("title") as string;
+    //     const author = formData.get("author") as string;
+    //     const genre = formData.get("genre") as string;
+    //     const publishedDate = formData.get("publishedDate") as string;
 
-        const addBook = async () => {
-            const {error} = await supabase.from("book").insert([{title, author, genre, publishedDate }]);
-            if (error) {
-                throw new Error(error.message);
-            }
+    //     const addBook = async () => {
+    //         const {error} = await supabase.from("book").insert([{title, author, genre, publishedDate }]);
+    //         if (error) {
+    //             throw new Error(error.message);
+    //         }
+    //     }
+    //     toast.promise(addBook, {
+    //         loading: `Adding book ${title}...`,
+    //         success: () => {
+    //             revalidatePath("/books", "page");
+    //             if(formRef.current) formRef.current.reset();
+    //             handleCloseModal();
+    //             return `${title} Book added successfully`
+    //         },
+    //         error: (error) => `Failed to add book, ERROR: ${error.message}`
+    //     })
+    // };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if(formRef.current) {
+            
+            const formData = new FormData(formRef.current);
+            const title = formData.get("title") as string;
+            const author = formData.get("author") as string;
+            const genre = formData.get("genre") as string;
+            const publishedDate = formData.get("publishedDate") as string;
+            const payload = {title, author, genre, publishedDate};
+
+            toast.promise(mutateAsync(payload), {
+                loading: `Adding book ${title}...`,
+                success: () => {
+                    revalidatePath("/books", "page");
+                    if(formRef.current) formRef.current.reset();
+                    handleCloseModal();
+                    return `${title} Book added successfully`
+                },
+                error: (error) => `Failed to add book, ERROR: ${error.message}`
+            })
         }
-        toast.promise(addBook, {
-            loading: `Adding book ${title}...`,
-            success: () => {
-                revalidatePath("/books", "page");
-                if(formRef.current) formRef.current.reset();
-                handleCloseModal();
-                return `${title} Book added successfully`
-            },
-            error: (error) => `Failed to add book, ERROR: ${error.message}`
-        })
-    };
+    }
 
     return (
         <>
             <button onClick={handleOpenModal} type="button" className="disabled:bg-gray-300 bg-blue-300 text-white hover:bg-blue-200 transition-colors px-3 py-2 rounded-lg" >New Book</button>
             <Modal label="New Book" isOpen={isOpen} onClose={handleCloseModal}>
-                <form ref={formRef} action={action} className="flex flex-col justify-end min-w-[400px]">
+                <form 
+                ref={formRef}
+                //  action={action} 
+                 onSubmit={handleSubmit}
+                 className="flex flex-col justify-end min-w-[400px]">
                     <div className="space-y-4 my-5">
                         <Input label="Title" type="text" name="title"/>
                         <Input label="Author" type="text"name="author"/>
