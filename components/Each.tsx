@@ -5,9 +5,6 @@ interface EachProps<T> {
     render: (item: T, index: number) => React.ReactNode
 }
 
-
 export default function Each<T>({ of, render }: EachProps<T>) {
-  return Children.map(of, (item, index) => {
-    return render(item, index)
-  })
+  return of.map((item, index) => render(item, index))
 }
