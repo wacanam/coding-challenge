@@ -1,20 +1,22 @@
 import BookCard from '@/components/BookCard';
 import Each from '@/components/Each';
 import AddBook from '../../components/AddBook';
-import { useSupabase } from '@/hooks/useSupabase';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 
 export default async function Notes() {
-  const supabase = useSupabase()
+  const supabase = createClient()
 
-  const { data: books } = await supabase.from("book").select().order("id", {ascending: false});
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  const addBookAction = async () => {
-    "use server";
-    // delay for 1 second
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Added");
+  if (!user) {
+    return redirect("/login");
   }
   
+  const { data: books } = await supabase.from("book").select().order("id", {ascending: false});
+
   return (
     <div className='flex-1 max-w-4xl px-4'>
       <h1 className='sr-only'>Books</h1>
