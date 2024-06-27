@@ -6,16 +6,16 @@ import { revalidatePath } from "@/actions/cache.action";
 import ActionButton from "@/components/ActionButton";
 import { Input } from "@/components/Input";
 import { Modal } from "@/components/Modal";
-import { useSupabase } from "@/hooks/useSupabase";
 import { useAddBook } from "@/queries/useAddBook";
+import { useSupabase } from "@/hooks/useSupabase";
 
 interface AddBookProps {}
 
 export default function AddBook(props: AddBookProps){
-    // const supabase = useSupabase()
     const [isOpen, setIsOpen] = React.useState(false);
     const formRef = React.useRef<HTMLFormElement>(null);
-    const { mutateAsync } = useAddBook();
+    const { mutateAsync, isPending } = useAddBook();
+    // const supabase = useSupabase()
 
     const handleOpenModal = () => {
         setIsOpen(true);
@@ -89,7 +89,7 @@ export default function AddBook(props: AddBookProps){
                     </div>
                     <div className="flex justify-end gap-5 items-center mt-5">
                         <button type="button" onClick={handleCloseModal}>Cancel</button>
-                        <ActionButton className="disabled:bg-gray-300 bg-blue-400 text-white hover:bg-blue-300 transition-colors px-3 py-2 rounded-lg" >Add Book</ActionButton>
+                        <ActionButton disabled={isPending} className="disabled:bg-gray-300 bg-blue-400 text-white hover:bg-blue-300 transition-colors px-3 py-2 rounded-lg" >Add Book</ActionButton>
                     </div>
                     </form>
             </Modal>

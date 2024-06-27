@@ -3,11 +3,11 @@
 import React from "react";
 import ActionButton from "./ActionButton";
 import { toast } from "sonner";
-import { revalidatePath } from "@/actions/cache.action";
 import { Input } from "./Input";
 import { Modal } from "./Modal";
-import { useSupabase } from "@/hooks/useSupabase";
 import { useUpdateBook } from "@/queries/useUpdateBook";
+import { useSupabase } from "@/hooks/useSupabase";
+import { revalidatePath } from "@/actions/cache.action";
 
 interface UpdateBookProps {
     book: {
@@ -20,9 +20,9 @@ interface UpdateBookProps {
 }
 
 export const UpdateBook = ({book: {id, title, author, genre, publishedDate}}: UpdateBookProps) => {
-    // const supabase = useSupabase()
-    const { mutateAsync } = useUpdateBook();
+    const { mutateAsync, isPending } = useUpdateBook();
     const [isOpen, setIsOpen] = React.useState(false);
+    // const supabase = useSupabase()
 
     const handleOpenModal = () => {
         setIsOpen(true);
@@ -95,7 +95,7 @@ export const UpdateBook = ({book: {id, title, author, genre, publishedDate}}: Up
                     </div>
                     <div className="flex justify-end gap-5 items-center mt-5">
                         <button type="button" onClick={handleCloseModal}>Cancel</button>
-                        <ActionButton className="disabled:bg-gray-300 bg-blue-400 text-white hover:bg-blue-300 transition-colors px-3 py-2 rounded-lg" >Save Changes</ActionButton>
+                        <ActionButton disabled={isPending} className="disabled:bg-gray-300 bg-blue-400 text-white hover:bg-blue-300 transition-colors px-3 py-2 rounded-lg" >Save Changes</ActionButton>
                     </div>
                     </form>
             </Modal>

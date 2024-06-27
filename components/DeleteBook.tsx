@@ -3,10 +3,10 @@
 import React from "react";
 import ActionButton from "./ActionButton";
 import { toast } from "sonner";
+import { useDeleteBook } from "@/queries/useDeleteBook";
 import { revalidatePath } from "@/actions/cache.action";
 import { useSupabase } from "@/hooks/useSupabase";
 import { useQueryClient } from "@tanstack/react-query";
-import { useDeleteBook } from "@/queries/useDeleteBook";
 
 interface DeleteBookProps {
   id: number;
@@ -14,9 +14,10 @@ interface DeleteBookProps {
 }
 
 export const DeleteBook = ({ id, title }: DeleteBookProps) => {
+
+  const { mutateAsync, isPending } = useDeleteBook();
   // const supabase = useSupabase()
   // const queryClient = useQueryClient();
-  const { mutateAsync } = useDeleteBook();
 
   // const action = async () => {
   //     const deleteBook = async () => {
@@ -56,7 +57,7 @@ export const DeleteBook = ({ id, title }: DeleteBookProps) => {
       onSubmit={handleSumbit}
       className="flex justify-end"
     >
-      <ActionButton className="disabled:bg-gray-300 bg-red-400 text-white hover:bg-red-300 transition-colors px-3 py-2 rounded-lg">
+      <ActionButton disabled={isPending} className="disabled:bg-gray-300 bg-red-400 text-white hover:bg-red-300 transition-colors px-3 py-2 rounded-lg">
         Delete
       </ActionButton>
     </form>
