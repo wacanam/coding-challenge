@@ -49,3 +49,14 @@
   border-radius: 0 0 0 100%;
   box-shadow: -10px 10px 0 10px rgb(253 224 71 / var(--tw-bg-opacity));
 }
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

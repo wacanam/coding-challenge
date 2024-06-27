@@ -4,6 +4,7 @@ import { DeleteBook } from "./DeleteBook";
 import { UpdateBook } from "./UpdateBook";
 
 interface BookCardProps {
+    style?: React.CSSProperties;
     book: {
         id: number;
         title: string;
@@ -13,11 +14,11 @@ interface BookCardProps {
     }
 }
 
-export default function BookCard({ book}: BookCardProps) {
+export default function BookCard({ book, style}: BookCardProps) {
     const {id, title, author, genre, publishedDate} = book;
     
     return (
-        <div className="group/actions shadow-lg max-w-[300px] rounded-lg overflow-hidden">
+        <div className="group/actions shadow-lg max-w-[300px] rounded-lg overflow-hidden" style={style}>
             <Image src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="book" width={500}  height={500} className=" w-full object-cover aspect-square bg-red-300 overflow-hidden " />
             <div className="flex-1 p-3">
                 <div className="flex-1 space-y-3 mt-2">
