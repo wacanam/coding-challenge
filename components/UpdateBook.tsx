@@ -3,10 +3,10 @@
 import React from "react";
 import ActionButton from "./ActionButton";
 import { toast } from "sonner";
-import { supabase } from "@/utils/supabase/client";
 import { revalidatePath } from "@/actions/cache.action";
 import { Input } from "./Input";
 import { Modal } from "./Modal";
+import { useSupabase } from "@/hooks/useSupabase";
 
 interface UpdateBookProps {
     book: {
@@ -19,6 +19,7 @@ interface UpdateBookProps {
 }
 
 export const UpdateBook = ({book: {id, title, author, genre, publishedDate}}: UpdateBookProps) => {
+    const supabase = useSupabase()
     const [isOpen, setIsOpen] = React.useState(false);
 
     const handleOpenModal = () => {

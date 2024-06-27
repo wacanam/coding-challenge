@@ -2,17 +2,16 @@
 
 import React from "react";
 import { toast } from "sonner";
-import { supabase } from "@/utils/supabase/client";
 import { revalidatePath } from "@/actions/cache.action";
 import ActionButton from "@/components/ActionButton";
 import { Input } from "@/components/Input";
 import { Modal } from "@/components/Modal";
+import { useSupabase } from "@/hooks/useSupabase";
 
-
-interface AddBookProps {
-}
+interface AddBookProps {}
 
 export default function AddBook(props: AddBookProps){
+    const supabase = useSupabase()
     const [isOpen, setIsOpen] = React.useState(false);
     const formRef = React.useRef<HTMLFormElement>(null);
 

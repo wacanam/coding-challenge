@@ -3,8 +3,8 @@
 import React from "react";
 import ActionButton from "./ActionButton";
 import { toast } from "sonner";
-import { supabase } from "@/utils/supabase/client";
 import { revalidatePath } from "@/actions/cache.action";
+import { useSupabase } from "@/hooks/useSupabase";
 
 interface DeleteBookProps {
     id: number;
@@ -12,6 +12,7 @@ interface DeleteBookProps {
 }
 
 export const DeleteBook = ({id, title}: DeleteBookProps) => {
+    const supabase = useSupabase()
 
     const action = async () => {
         const deleteBook = async () => {
