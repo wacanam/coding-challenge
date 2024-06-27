@@ -25,3 +25,27 @@
     @apply border-foreground/20;
   }
 }
+
+.active-tab::before,
+.active-tab::after {
+  content: "";
+  position: absolute;
+  width: 20px; /* Circle size */
+  height: 20px; /* Circle size */
+}
+
+.active-tab::before {
+  left: -20px; /* Position the circle to the left of the tab */
+  bottom: 10px;
+  transform: translateY(-50%);
+  border-radius: 0 0 100% 0;
+  box-shadow: 10px 10px 0 10px rgb(253 224 71 / var(--tw-bg-opacity));
+}
+
+.active-tab::after {
+  right: -20px; /* Position the circle to the left of the tab */
+  bottom: 10px;
+  transform: translateY(-50%);
+  border-radius: 0 0 0 100%;
+  box-shadow: -10px 10px 0 10px rgb(253 224 71 / var(--tw-bg-opacity));
+}
