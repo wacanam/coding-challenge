@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import { Navigation } from "../components/Navigation";
 import { Footer } from "../components/Footer";
+import { Toaster } from "sonner";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.className}>
       <body className="bg-background text-foreground">
+        <Toaster position="top-center" />
         <div className="min-h-screen flex-1 flex flex-col items-center">
           <Navigation />
           <div className="flex-1 w-full flex flex-col gap-20 items-center">
