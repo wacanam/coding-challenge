@@ -7,6 +7,7 @@ import { revalidatePath } from "@/actions/cache.action";
 import { Input } from "./Input";
 import { Modal } from "./Modal";
 import { useSupabase } from "@/hooks/useSupabase";
+import { useUpdateBook } from "@/queries/useUpdateBook";
 
 interface UpdateBookProps {
     book: {
@@ -19,7 +20,8 @@ interface UpdateBookProps {
 }
 
 export const UpdateBook = ({book: {id, title, author, genre, publishedDate}}: UpdateBookProps) => {
-    const supabase = useSupabase()
+    // const supabase = useSupabase()
+    const { mutateAsync } = useUpdateBook();
     const [isOpen, setIsOpen] = React.useState(false);
 
     const handleOpenModal = () => {
@@ -30,28 +32,50 @@ export const UpdateBook = ({book: {id, title, author, genre, publishedDate}}: Up
         setIsOpen(false);
     }
 
-    const action = async (formData: FormData) => {
+    // const action = async (formData: FormData) => {
+    //     const title = formData.get("title") as string;
+    //     const author = formData.get("author") as string;
+    //     const genre = formData.get("genre") as string;
+    //     const publishedDate = formData.get("publishedDate") as string;
+        
+    //     const updateBook = async () => {
+    //         const {error} = await supabase.from("book").update({title, author, genre, publishedDate }).eq("id", id);
+    //         if (error) {
+    //             throw new Error(error.message);
+    //         }
+    //     }
+    //     toast.promise(updateBook, {
+    //         loading: `Updating book ${title}...`,
+    //         success: () => {
+    //             revalidatePath("/books", "page");
+    //             handleCloseModal();
+    //             return `${title} Book updated successfully`
+    //         },
+    //         error: (error) => `Failed to delete book, ERROR: ${error.message}`
+    //     })
+    // };
+
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        
         const title = formData.get("title") as string;
         const author = formData.get("author") as string;
         const genre = formData.get("genre") as string;
         const publishedDate = formData.get("publishedDate") as string;
-        
-        const updateBook = async () => {
-            const {error} = await supabase.from("book").update({title, author, genre, publishedDate }).eq("id", id);
-            if (error) {
-                throw new Error(error.message);
-            }
-        }
-        toast.promise(updateBook, {
+
+        toast.promise(mutateAsync({id, title, author, genre, publishedDate}), {
             loading: `Updating book ${title}...`,
             success: () => {
-                revalidatePath("/books", "page");
+                // revalidatePath("/books", "page");
                 handleCloseModal();
                 return `${title} Book updated successfully`
             },
-            error: (error) => `Failed to delete book, ERROR: ${error.message}`
+            error: (error) => `Failed to update book, ERROR: ${error.message}`
         })
-    };
+    }
+
 
     const formattedDate = new Date(publishedDate).toISOString().split("T")[0];
 
@@ -59,7 +83,10 @@ export const UpdateBook = ({book: {id, title, author, genre, publishedDate}}: Up
         <>
             <button onClick={handleOpenModal} type="button" className="disabled:bg-gray-300 bg-slate-300 text-black hover:bg-slate-200 transition-colors px-3 py-2 rounded-lg" >Edit</button>
             <Modal label="Update Book" isOpen={isOpen} onClose={handleCloseModal}>
-                <form action={action} className="flex flex-col justify-end min-w-[400px]">
+                <form 
+                    // action={action}
+                    onSubmit={handleSubmit}
+                    className="flex flex-col justify-end min-w-[400px]">
                     <div className="space-y-4 my-5">
                         <Input label="Title" type="text" defaultValue={title} name="title"/>
                         <Input label="Author" type="text" defaultValue={author} name="author"/>

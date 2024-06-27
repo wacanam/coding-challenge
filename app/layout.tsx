@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import { Navigation } from "../components/Navigation";
 import { Footer } from "../components/Footer";
 import { Toaster } from "sonner";
+import Providers from "@/providers/QueryProvider";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -21,6 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <Providers>
     <html lang="en" className={GeistSans.className}>
       <body className="bg-background text-foreground">
         <Toaster position="top-center" />
@@ -34,5 +36,6 @@ export default function RootLayout({
         </div>
       </body>
     </html>
+    </Providers>
   );
 }
