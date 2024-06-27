@@ -1,9 +1,10 @@
 import BookCard from '@/components/BookCard';
 import Each from '@/components/Each';
-import { supabase } from '@/utils/supabase/client';
 import AddBook from '../../components/AddBook';
+import { useSupabase } from '@/hooks/useSupabase';
 
 export default async function Notes() {
+  const supabase = useSupabase()
 
   const { data: books } = await supabase.from("book").select().order("id", {ascending: false});
 
